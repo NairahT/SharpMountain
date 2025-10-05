@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,8 +6,11 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private List<Card> cards;
     [SerializeField] private List<Card> selectedCards;
+    [SerializeField] private Card firstSelectedCard;
+    [SerializeField] private Card secondSelectedCard;
 
-    private bool _isCheckingForMatch = false;
+    private int _cardCounter = 0;
+    
     private void Start()
     {
         foreach (var card in cards)
@@ -18,32 +21,44 @@ public class GameManager : MonoBehaviour
 
     private void HandleSelectedCard(Card card)
     {
-        selectedCards.Add(card);
-        if (selectedCards.Count == 2)
+        switch (_cardCounter)
         {
-            StartCoroutine(CheckMatch());
+            case 0:
+                firstSelectedCard = card;
+                _cardCounter++;
+                break;
+            case 1:
+                secondSelectedCard = card;
+                _cardCounter = 0;
+                CheckMatch();
+                break;
         }
     }
 
-    private IEnumerator CheckMatch()
+    private void CheckMatch()
     {
-        var cardOne = selectedCards[0];
-        var cardTwo = selectedCards[1];
-
-        if (cardOne.CardType == cardTwo.CardType)
+        if (firstSelectedCard.CardType == secondSelectedCard.CardType)
         {
-            Debug.Log($"found a match of type {cardOne.CardType}");
-            cardOne.FoundMatch();
-            cardTwo.FoundMatch();
+            Debug.Log($"found a match of type {firstSelectedCard.CardType}");
+            firstSelectedCard.FoundMatch();
+            secondSelectedCard.FoundMatch();
         }
         else
         {
-            Debug.Log($"No match found between {cardOne.CardType} and {cardTwo.CardType}");
-            yield return new WaitForSeconds(1.5f);
+            Debug.Log($"No match found between {firstSelectedCard.CardType} and {secondSelectedCard.CardType}");
             
-            cardOne.FlipFaceDown();
-            cardTwo.FlipFaceDown();
+            firstSelectedCard.FlipFaceDown();
+            secondSelectedCard.FlipFaceDown();
         }
-        selectedCards.Clear();
+        firstSelectedCard = null;
+        secondSelectedCard = null;
+    }
+
+    private void OnDisable()
+    {
+        foreach (var card in cards)
+        {
+            card.OnCardSelected -= HandleSelectedCard;
+        }
     }
 }

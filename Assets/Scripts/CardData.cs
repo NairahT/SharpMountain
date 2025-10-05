@@ -3,8 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Card Data", menuName = "Cards/Card Data")]
 public class CardData : ScriptableObject
 {
-    public CardType type;
-    public Sprite image;
+    public CardType Type;
+    public Sprite Image;
 }
 
 public enum CardType
