@@ -18,6 +18,7 @@ public class Card : MonoBehaviour
     
     private bool _isFaceUp = false;
     private bool _isFlipping = false;
+    private bool _isMatched = false;
 
     private void OnEnable() => cardButton.onClick.AddListener(OnClickCard);
     private void OnDisable() => cardButton.onClick.RemoveListener(OnClickCard);
@@ -28,7 +29,7 @@ public class Card : MonoBehaviour
         _cardFrontColor = card.cardColor;
     }
 
-    public void OnClickCard()
+    private void OnClickCard()
     {
         FlipCard(true);
         OnCardSelected?.Invoke(this);
@@ -37,14 +38,13 @@ public class Card : MonoBehaviour
     private void FlipCard(bool faceUp)
     {
         if (_isFlipping) return;
+        if(_isMatched)  return;
         if(_isFaceUp == faceUp) return;
         StartCoroutine(Flip(faceUp));
     }
     
     private IEnumerator Flip(bool faceUp) 
     {
-        Debug.Log($"Flipping card face up: {faceUp}");
-
         _isFlipping = true;
         
         var timeElapsed = 0f;
@@ -70,7 +70,12 @@ public class Card : MonoBehaviour
         }
         _isFlipping = false;
     }
+
+    public void FoundMatch()
+    {
+        _isMatched = true;
+    }
     
     private void FlipFaceUp() => FlipCard(true);
-    private void FlipFaceDown() => FlipCard(false);
+    public void FlipFaceDown() => FlipCard(false);
 }
