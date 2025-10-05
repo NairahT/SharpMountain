@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60123cae0af19f548af0b4ad3d7f0336, type: 3}
   m_Name: Cat
   m_EditorClassIdentifier: 
-  type: 1
-  image: {fileID: 21300000, guid: 9461b8a6578323a4da1eebba0307b2cc, type: 3}
+  Type: 1
+  Image: {fileID: 21300000, guid: 9461b8a6578323a4da1eebba0307b2cc, type: 3}

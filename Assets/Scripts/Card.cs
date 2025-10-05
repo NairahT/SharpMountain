@@ -49,6 +49,8 @@ public class Card : MonoBehaviour
     {
         _isFlipping = true;
         
+        AudioManager.Instance.PlayFlip();
+        
         var timeElapsed = 0f;
         float startAngle = _isFaceUp ? 180 : 0;
         float endAngle = faceUp ? 180 : 0;

@@ -4,9 +4,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private List<Card> cards;
-    [SerializeField] private List<Card> selectedCards;
-    [SerializeField] private Card firstSelectedCard;
-    [SerializeField] private Card secondSelectedCard;
+    
+    private Card _firstSelectedCard;
+    private Card _secondSelectedCard;
 
     private int _cardCounter = 0;
     
@@ -23,11 +23,11 @@ public class GameManager : MonoBehaviour
         switch (_cardCounter)
         {
             case 0:
-                firstSelectedCard = card;
+                _firstSelectedCard = card;
                 _cardCounter++;
                 break;
             case 1:
-                secondSelectedCard = card;
+                _secondSelectedCard = card;
                 _cardCounter = 0;
                 CheckMatch();
                 break;
@@ -36,21 +36,22 @@ public class GameManager : MonoBehaviour
 
     private void CheckMatch()
     {
-        if (firstSelectedCard.CardType == secondSelectedCard.CardType)
+        if (_firstSelectedCard.CardType == _secondSelectedCard.CardType)
         {
-            Debug.Log($"Found a match of type {firstSelectedCard.CardType}");
-            firstSelectedCard.FoundMatch();
-            secondSelectedCard.FoundMatch();
+            Debug.Log($"Found a match of type {_firstSelectedCard.CardType}");
+            AudioManager.Instance.PlayMatch();
+            _firstSelectedCard.FoundMatch();
+            _secondSelectedCard.FoundMatch();
         }
         else
         {
-            Debug.Log($"No match found between {firstSelectedCard.CardType} and {secondSelectedCard.CardType}");
-            
-            firstSelectedCard.FlipFaceDown();
-            secondSelectedCard.FlipFaceDown();
+            Debug.Log($"No match found between {_firstSelectedCard.CardType} and {_secondSelectedCard.CardType}");
+            AudioManager.Instance.PlayMismatch();
+            _firstSelectedCard.FlipFaceDown();
+            _secondSelectedCard.FlipFaceDown();
         }
-        firstSelectedCard = null;
-        secondSelectedCard = null;
+        _firstSelectedCard = null;
+        _secondSelectedCard = null;
     }
 
     private void OnDisable()
