@@ -7,12 +7,13 @@ public class Card : MonoBehaviour
 {
     [SerializeField] private Button cardButton;
     [SerializeField] private Image cardImage;
-    [SerializeField] private CardType cardType;
     [SerializeField] private float flipDuration = 0.5f;
-    public event Action<Card> OnCardSelected;
-    public CardType CardType => cardType;
+    [SerializeField] private CardData card;
     
-    private readonly Color _cardFrontColor = Color.black;
+    public event Action<Card> OnCardSelected;
+    public CardType CardType => card.type;
+    
+    private Color _cardFrontColor;
     private readonly Color _cardBackColor = Color.green;
     
     private bool _isFaceUp = false;
@@ -20,6 +21,12 @@ public class Card : MonoBehaviour
 
     private void OnEnable() => cardButton.onClick.AddListener(OnClickCard);
     private void OnDisable() => cardButton.onClick.RemoveListener(OnClickCard);
+
+    private void Start()
+    {
+        cardImage.color = _isFaceUp ? _cardFrontColor : _cardBackColor;
+        _cardFrontColor = card.cardColor;
+    }
 
     public void OnClickCard()
     {
