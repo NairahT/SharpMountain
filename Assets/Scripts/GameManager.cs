@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,7 +38,7 @@ public class GameManager : MonoBehaviour
     {
         if (firstSelectedCard.CardType == secondSelectedCard.CardType)
         {
-            Debug.Log($"found a match of type {firstSelectedCard.CardType}");
+            Debug.Log($"Found a match of type {firstSelectedCard.CardType}");
             firstSelectedCard.FoundMatch();
             secondSelectedCard.FoundMatch();
         }
