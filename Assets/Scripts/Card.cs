@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,8 +7,11 @@ public class Card : MonoBehaviour
 {
     [SerializeField] private Button cardButton;
     [SerializeField] private Image cardImage;
+    [SerializeField] private CardType cardType;
     [SerializeField] private float flipDuration = 0.5f;
-
+    public event Action<Card> OnCardSelected;
+    public CardType CardType => cardType;
+    
     private readonly Color _cardFrontColor = Color.black;
     private readonly Color _cardBackColor = Color.green;
     
@@ -17,9 +21,10 @@ public class Card : MonoBehaviour
     private void OnEnable() => cardButton.onClick.AddListener(OnClickCard);
     private void OnDisable() => cardButton.onClick.RemoveListener(OnClickCard);
 
-    private void OnClickCard()
+    public void OnClickCard()
     {
         FlipCard(true);
+        OnCardSelected?.Invoke(this);
     }
     
     private void FlipCard(bool faceUp)
