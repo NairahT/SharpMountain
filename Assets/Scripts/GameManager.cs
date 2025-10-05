@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Card> cards;
     [SerializeField] private List<Card> selectedCards;
 
+    private bool _isCheckingForMatch = false;
     private void Start()
     {
         foreach (var card in cards)

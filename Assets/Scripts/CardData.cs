@@ -4,12 +4,15 @@ using UnityEngine;
 public class CardData : ScriptableObject
 {
     public CardType type;
-    public Color cardColor;
+    public Sprite image;
 }
 
 public enum CardType
 {
-    A,
-    B,
-    C
+    Bear,
+    Cat,
+    Dog,
+    Duck,
+    Fox,
+    Lion
 }

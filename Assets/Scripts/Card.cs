@@ -8,13 +8,13 @@ public class Card : MonoBehaviour
     [SerializeField] private Button cardButton;
     [SerializeField] private Image cardImage;
     [SerializeField] private float flipDuration = 0.5f;
+    [SerializeField] private Sprite cardBackSprite;
     [SerializeField] private CardData card;
     
     public event Action<Card> OnCardSelected;
     public CardType CardType => card.type;
     
-    private Color _cardFrontColor;
-    private readonly Color _cardBackColor = Color.green;
+    private Sprite _cardFrontImg;
     
     private bool _isFaceUp = false;
     private bool _isFlipping = false;
@@ -25,8 +25,8 @@ public class Card : MonoBehaviour
 
     private void Start()
     {
-        cardImage.color = _isFaceUp ? _cardFrontColor : _cardBackColor;
-        _cardFrontColor = card.cardColor;
+        cardImage.sprite = _isFaceUp ? card.image : cardBackSprite;
+        _cardFrontImg = card.image;
     }
 
     private void OnClickCard()
@@ -60,7 +60,7 @@ public class Card : MonoBehaviour
     
             if (t >= 0.5f && !colorSwapped) 
             {
-                cardImage.color = faceUp ? _cardFrontColor : _cardBackColor;
+                cardImage.sprite = faceUp ? _cardFrontImg : cardBackSprite;
                 _isFaceUp = faceUp;
                 colorSwapped = true;
             }

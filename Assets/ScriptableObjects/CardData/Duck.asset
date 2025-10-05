@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60123cae0af19f548af0b4ad3d7f0336, type: 3}
-  m_Name: C
+  m_Name: Duck
   m_EditorClassIdentifier: 
-  type: 2
-  cardColor: {r: 0, g: 0, b: 1, a: 1}
+  type: 3
+  image: {fileID: 21300000, guid: 819187d941eee104b88feeda85295ef8, type: 3}
