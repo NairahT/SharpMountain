@@ -122,6 +122,8 @@ public class GameManager : MonoBehaviour
             _firstSelectedCard.FoundMatch();
             _secondSelectedCard.FoundMatch();
             scoreManager.UpdateScore();
+
+            CheckIfGameIsWon();
         }
         else
         {
@@ -132,6 +134,17 @@ public class GameManager : MonoBehaviour
         }
         _firstSelectedCard = null;
         _secondSelectedCard = null;
+    }
+
+    private void CheckIfGameIsWon()
+    {
+        foreach (var card in _allCards)
+        {
+            if (card.CurrentState != CardState.Matched) return;
+        }
+        Debug.Log("You won!");
+        AudioManager.Instance.PlayWinGame();
+        _acceptPlayerInput = false;
     }
 
     private void OnDisable()

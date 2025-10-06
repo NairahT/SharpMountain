@@ -8,6 +8,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip flipSound;
     [SerializeField] private AudioClip matchSound;
     [SerializeField] private AudioClip mismatchSound;
+    [SerializeField] private AudioClip winGameSound;
     
     private void Awake()
     {
@@ -23,4 +24,5 @@ public class AudioManager : MonoBehaviour
     public void PlayFlip() => audioSource.PlayOneShot(flipSound);
     public void PlayMatch() => audioSource.PlayOneShot(matchSound);
     public void PlayMismatch() => audioSource.PlayOneShot(mismatchSound);
+    public void PlayWinGame() => audioSource.PlayOneShot(winGameSound);
 }
