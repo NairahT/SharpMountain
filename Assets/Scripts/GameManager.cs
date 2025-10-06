@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,11 +6,13 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private CardSpawner cardSpawner;
     [SerializeField] private ScoreManager scoreManager;
+    [SerializeField] private float revealDuration = 5f;
     
     private List<Card> _allCards = new List<Card>();
     private Card _firstSelectedCard;
     private Card _secondSelectedCard;
     private int _cardCounter = 0;
+    private bool _acceptPlayerInput = false;
     
     private void Start() => InitializeGame();
     
@@ -26,10 +29,33 @@ public class GameManager : MonoBehaviour
         {
             card.OnCardSelected += HandleSelectedCard;
         }
+
+        StartCoroutine(InitialRevealSequence());
+    }
+    
+    private IEnumerator InitialRevealSequence()
+    {
+        _acceptPlayerInput = false;
+        foreach (var card in _allCards)
+        {
+            card.FlipFaceUp();
+        }
+        
+        yield return new WaitForSeconds(revealDuration);
+        
+        foreach (var card in _allCards)
+        {
+            card.FlipFaceDown();
+        }
+        
+        yield return new WaitForSeconds(0.6f);
+        _acceptPlayerInput = true;
     }
 
     private void HandleSelectedCard(Card card)
     {
+        if (!_acceptPlayerInput) return;
+        
         switch (_cardCounter)
         {
             case 0:

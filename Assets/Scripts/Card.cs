@@ -102,6 +102,7 @@ public class Card : MonoBehaviour
         cardImage.transform.localScale = targetScale;
     }
     
+    public void FlipFaceUp() => FlipCard(true);
     public void FlipFaceDown() => StartCoroutine(FlipDownWithDelay());
     
     private IEnumerator FlipDownWithDelay()

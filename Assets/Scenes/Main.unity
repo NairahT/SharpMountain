@@ -798,6 +798,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardSpawner: {fileID: 1204039866}
   scoreManager: {fileID: 1204039865}
+  revealDuration: 5
 --- !u!4 &1204039864
 Transform:
   m_ObjectHideFlags: 0
