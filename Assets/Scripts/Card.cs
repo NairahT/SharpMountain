@@ -75,7 +75,29 @@ public class Card : MonoBehaviour
         _isFlipping = false;
     }
 
-    public void FoundMatch() => _isMatched = true;
+    public void FoundMatch()
+    {
+        _isMatched = true;
+        ScaleCardUp();
+    } 
+
+    private void ScaleCardUp() => StartCoroutine(ScaleCard(0.1f));
+    
+    private IEnumerator ScaleCard(float timeToScale)
+    {
+        var startScale = cardImage.transform.localScale;
+        var targetScale = startScale * 1.3f;
+        var elapsedTime = 0f;
+
+        while (elapsedTime < timeToScale)
+        {
+            var t = elapsedTime / timeToScale;
+            cardImage.transform.localScale = Vector3.Lerp(startScale, targetScale, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        cardImage.transform.localScale = targetScale;
+    }
     
     public void FlipFaceDown() => StartCoroutine(FlipDownWithDelay());
     
