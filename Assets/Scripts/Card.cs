@@ -70,7 +70,10 @@ public class Card : MonoBehaviour
             if (t >= 0.5f && !colorSwapped) 
             {
                 cardImage.sprite = faceUp ? _cardFrontImg : cardBackSprite;
-                CurrentState = faceUp ? CardState.FaceUp : CardState.FaceDown;
+                if (CurrentState != CardState.Matched)
+                {
+                    CurrentState = faceUp ? CardState.FaceUp : CardState.FaceDown;
+                }
                 colorSwapped = true;
             }
     
@@ -96,10 +99,6 @@ public class Card : MonoBehaviour
                 cardImage.sprite = _cardFrontImg;
                 cardImage.transform.rotation = Quaternion.Euler(0, 180, 0);
                 cardImage.transform.localScale = Vector3.one * 1.3f; 
-                break;
-            case CardState.FaceUp:
-                cardImage.sprite = _cardFrontImg;
-                cardImage.transform.rotation = Quaternion.Euler(0, 180, 0);
                 break;
             case CardState.FaceDown:
             default:

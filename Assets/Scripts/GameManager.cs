@@ -42,7 +42,10 @@ public class GameManager : MonoBehaviour
         
         for (int i = 0; i < _allCards.Count; i++)
         {
-            _allCards[i].SetCardState(data.cardStates[i]);
+            if (data.cardIsMatched[i])
+            {
+                _allCards[i].SetCardState(CardState.Matched);
+            }
         }
         
         scoreManager.SetScore(data.score);

@@ -13,13 +13,13 @@ public class SaveSystem : MonoBehaviour
             score = scoreManager.Score,
             pairsCount = cards.Count / 2,
             cardTypes = new CardType[cards.Count],
-            cardStates = new CardState[cards.Count]
+            cardIsMatched = new bool[cards.Count]
         };
         
         for (int i = 0; i < cards.Count; i++)
         {
             data.cardTypes[i] = cards[i].CardType;
-            data.cardStates[i] = cards[i].CurrentState;
+            data.cardIsMatched[i] = cards[i].CurrentState == CardState.Matched;
         }
         
         string json = JsonUtility.ToJson(data, true);
@@ -48,5 +48,5 @@ public class SaveData
     public int score;
     public int pairsCount;
     public CardType[] cardTypes; 
-    public CardState[] cardStates;
+    public bool[] cardIsMatched; 
 }
