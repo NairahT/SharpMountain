@@ -3,17 +3,26 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private List<Card> cards;
+    [SerializeField] private CardSpawner cardSpawner;
     [SerializeField] private ScoreManager scoreManager;
     
+    private List<Card> _allCards = new List<Card>();
     private Card _firstSelectedCard;
     private Card _secondSelectedCard;
-
     private int _cardCounter = 0;
     
-    private void Start()
+    private void Start() => InitializeGame();
+    
+    private void InitializeGame()
     {
-        foreach (var card in cards)
+        _allCards = cardSpawner.ShuffleAndSpawnCards();
+        if (_allCards == null || _allCards.Count == 0)
+        {
+            Debug.LogError("Failed to spawn cards!");
+            return;
+        }
+        
+        foreach (var card in _allCards)
         {
             card.OnCardSelected += HandleSelectedCard;
         }
@@ -58,7 +67,7 @@ public class GameManager : MonoBehaviour
 
     private void OnDisable()
     {
-        foreach (var card in cards)
+        foreach (var card in _allCards)
         {
             card.OnCardSelected -= HandleSelectedCard;
         }

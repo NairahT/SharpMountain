@@ -5,15 +5,16 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
+    public event Action<Card> OnCardSelected;
+    
     [SerializeField] private Button cardButton;
     [SerializeField] private Image cardImage;
     [SerializeField] private float flipDuration = 0.5f;
     [SerializeField] private Sprite cardBackSprite;
-    [SerializeField] private CardData card;
     
-    public event Action<Card> OnCardSelected;
-    public CardType CardType => card.Type;
+    public CardType CardType => _card.Type;
     
+    private CardData _card;
     private Sprite _cardFrontImg;
     private bool _isFaceUp = false;
     private bool _isFlipping = false;
@@ -24,10 +25,12 @@ public class Card : MonoBehaviour
 
     private void Start()
     {
-        cardImage.sprite = _isFaceUp ? card.Image : cardBackSprite;
-        _cardFrontImg = card.Image;
+        cardImage.sprite = _isFaceUp ? _card.Image : cardBackSprite;
+        _cardFrontImg = _card.Image;
     }
 
+    public void SetCardData(CardData cardData) => _card = cardData;
+    
     private void OnClickCard()
     {
         if(_isMatched) return;
