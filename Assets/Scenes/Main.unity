@@ -792,8 +792,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1204039864}
   - component: {fileID: 1204039863}
-  - component: {fileID: 1204039865}
   - component: {fileID: 1204039866}
+  - component: {fileID: 1204039865}
   - component: {fileID: 1204039867}
   m_Layer: 0
   m_Name: GameManager
@@ -816,8 +816,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardSpawner: {fileID: 1204039866}
   scoreManager: {fileID: 1204039865}
-  revealDuration: 5
   saveSystem: {fileID: 1204039867}
+  revealDuration: 5
 --- !u!4 &1204039864
 Transform:
   m_ObjectHideFlags: 0
@@ -868,8 +868,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 26e528a8a94e5e54ea9aa3117667002c, type: 2}
   amountOfPairsToSpawn: 6
   gridConfig: {fileID: 879943500}
-  gridRows: 4
-  gridColumns: 3
+  gridRows: 3
+  gridColumns: 4
 --- !u!114 &1204039867
 MonoBehaviour:
   m_ObjectHideFlags: 0

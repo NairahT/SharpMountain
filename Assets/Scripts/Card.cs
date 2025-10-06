@@ -32,63 +32,6 @@ public class Card : MonoBehaviour
         CurrentState = CardState.FaceDown;
     }
     
-    private void OnClickCard()
-    {
-        if (IsCurrentlyUp) return;
-        if(_isFlipping) return;
-        
-        FlipCard(true);
-        OnCardSelected?.Invoke(this);
-    }
-    
-    private void FlipCard(bool faceUp)
-    {
-        if(_isFlipping) return;
-        
-        if(IsCurrentlyUp == faceUp) return;
-        
-        StartCoroutine(Flip(faceUp));
-    }
-    
-    private IEnumerator Flip(bool faceUp) 
-    {
-        _isFlipping = true;
-        
-        AudioManager.Instance.PlayFlip();
-        
-        var timeElapsed = 0f;
-        float startAngle = IsCurrentlyUp ? 180 : 0;
-        float endAngle = faceUp ? 180 : 0;
-        var colorSwapped = false;
-    
-        while (timeElapsed < flipDuration) 
-        {
-            var t = timeElapsed / flipDuration;
-            var angle = Mathf.Lerp(startAngle, endAngle, t);
-            cardImage.transform.rotation = Quaternion.Euler(0, angle, 0);
-    
-            if (t >= 0.5f && !colorSwapped) 
-            {
-                cardImage.sprite = faceUp ? _cardFrontImg : cardBackSprite;
-                if (CurrentState != CardState.Matched)
-                {
-                    CurrentState = faceUp ? CardState.FaceUp : CardState.FaceDown;
-                }
-                colorSwapped = true;
-            }
-    
-            timeElapsed += Time.deltaTime;
-            yield return null;
-        }
-        _isFlipping = false;
-    }
-
-    public void FoundMatch()
-    {
-        CurrentState = CardState.Matched;
-        ScaleCardUp();
-    }
-
     public void SetCardState(CardState state)
     {
         CurrentState = state;
@@ -107,7 +50,63 @@ public class Card : MonoBehaviour
                 break;
         }
     }
+    
+    private void OnClickCard()
+    {
+        if (IsCurrentlyUp) return;
+        if(_isFlipping) return;
+        
+        FlipCard(true);
+        OnCardSelected?.Invoke(this);
+    }
+    
+    private void FlipCard(bool faceUp)
+    {
+        if(_isFlipping) return;
+        if(IsCurrentlyUp == faceUp) return;
+        
+        StartCoroutine(Flip(faceUp));
+    }
+    
+    private IEnumerator Flip(bool faceUp) 
+    {
+        _isFlipping = true;
+        
+        AudioManager.Instance.PlayFlip();
+        
+        var timeElapsed = 0f;
+        float startAngle = IsCurrentlyUp ? 180 : 0;
+        float endAngle = faceUp ? 180 : 0;
+        var spriteSwapped = false;
+    
+        while (timeElapsed < flipDuration) 
+        {
+            var t = timeElapsed / flipDuration;
+            var angle = Mathf.Lerp(startAngle, endAngle, t);
+            cardImage.transform.rotation = Quaternion.Euler(0, angle, 0);
+    
+            if (t >= 0.5f && !spriteSwapped) 
+            {
+                cardImage.sprite = faceUp ? _cardFrontImg : cardBackSprite;
+                if (CurrentState != CardState.Matched)
+                {
+                    CurrentState = faceUp ? CardState.FaceUp : CardState.FaceDown;
+                }
+                spriteSwapped = true;
+            }
+    
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        _isFlipping = false;
+    }
 
+    public void FoundMatch()
+    {
+        CurrentState = CardState.Matched;
+        ScaleCardUp();
+    }
+    
     private void ScaleCardUp() => StartCoroutine(ScaleCard(0.1f));
     
     private IEnumerator ScaleCard(float timeToScale)
@@ -134,5 +133,4 @@ public class Card : MonoBehaviour
         yield return new WaitForSeconds(1f);
         FlipCard(false);
     }
-
 }

@@ -8,5 +8,5 @@ public class UIManager : MonoBehaviour
     
     private void OnEnable() => scoreManager.OnScoreChanged += UpdateScoreUI;
     private void OnDisable() => scoreManager.OnScoreChanged -= UpdateScoreUI;
-    private void UpdateScoreUI(int score) =>scoreText.text = score.ToString();
+    private void UpdateScoreUI(int score) => scoreText.text = score.ToString();
 }

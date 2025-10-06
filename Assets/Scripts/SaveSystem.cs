@@ -8,7 +8,7 @@ public class SaveSystem : MonoBehaviour
     
     public void SaveGame(ScoreManager scoreManager, List<Card> cards)
     {
-        SaveData data = new SaveData
+        var data = new SaveData
         {
             score = scoreManager.Score,
             pairsCount = cards.Count / 2,
@@ -22,7 +22,7 @@ public class SaveSystem : MonoBehaviour
             data.cardIsMatched[i] = cards[i].CurrentState == CardState.Matched;
         }
         
-        string json = JsonUtility.ToJson(data, true);
+        var json = JsonUtility.ToJson(data, true);
         File.WriteAllText(savePath, json);
         Debug.Log("Game saved!");
     }
@@ -35,19 +35,17 @@ public class SaveSystem : MonoBehaviour
             return null;
         }
         
-        string json = File.ReadAllText(savePath);
-        SaveData data = JsonUtility.FromJson<SaveData>(json);
+        var json = File.ReadAllText(savePath);
+        var data = JsonUtility.FromJson<SaveData>(json);
         Debug.Log("Game loaded!");
         return data;
     }
     
     public void DeleteSave()
     {
-        if (File.Exists(savePath))
-        {
-            File.Delete(savePath);
-            Debug.Log("Save deleted");
-        }
+        if (!File.Exists(savePath)) return;
+        File.Delete(savePath);
+        Debug.Log("Save deleted");
     }
 }
 

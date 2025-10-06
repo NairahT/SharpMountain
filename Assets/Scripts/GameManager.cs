@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     private List<Card> _allCards = new List<Card>();
     private Card _firstSelectedCard;
     private Card _secondSelectedCard;
+    
     private int _cardCounter = 0;
     private bool _acceptPlayerInput = false;
     private bool _didWin = false;
@@ -33,12 +34,7 @@ public class GameManager : MonoBehaviour
     {
         cardSpawner.SetPairsToSpawn(data.pairsCount);
         _allCards = cardSpawner.SpawnCardsFromSave(data.cardTypes);
-        
-        if (_allCards == null || _allCards.Count == 0)
-        {
-            Debug.LogError("Failed to spawn cards!");
-            return;
-        }
+        if(!ValidateCards(_allCards)) return;
         
         for (int i = 0; i < _allCards.Count; i++)
         {
@@ -58,14 +54,11 @@ public class GameManager : MonoBehaviour
     private void InitializeNewGame()
     {
         _allCards = cardSpawner.ShuffleAndSpawnCards();
-        if (_allCards == null || _allCards.Count == 0)
-        {
-            Debug.LogError("Failed to spawn cards!");
-            return;
-        }
-
+        if(!ValidateCards(_allCards)) return;
+        
         SubscribeToCards();
         StartCoroutine(InitialRevealSequence());
+        Debug.Log("New game initialized");
     }
     
     private IEnumerator InitialRevealSequence()
@@ -147,6 +140,13 @@ public class GameManager : MonoBehaviour
         AudioManager.Instance.PlayWinGame();
         saveSystem.DeleteSave();
         _acceptPlayerInput = false;
+    }
+
+    private bool ValidateCards(List<Card> cards)
+    {
+        if (cards != null && cards.Count != 0) return true;
+        Debug.LogError("Failed to spawn cards!");
+        return false;
     }
 
     private void OnDisable()
