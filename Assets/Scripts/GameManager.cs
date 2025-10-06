@@ -7,16 +7,52 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CardSpawner cardSpawner;
     [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private float revealDuration = 5f;
+    [SerializeField] private SaveSystem saveSystem;
     
     private List<Card> _allCards = new List<Card>();
     private Card _firstSelectedCard;
     private Card _secondSelectedCard;
     private int _cardCounter = 0;
     private bool _acceptPlayerInput = false;
+
+    private void Start()
+    {
+        SaveData saveData = saveSystem.LoadGame();
+
+        if (saveData != null)
+        {
+            LoadFromSave(saveData);
+        }
+        else
+        {
+            InitializeNewGame();
+        }
+    }
     
-    private void Start() => InitializeGame();
+    private void LoadFromSave(SaveData data)
+    {
+        cardSpawner.SetPairsToSpawn(data.pairsCount);
+        _allCards = cardSpawner.SpawnCardsFromSave(data.cardTypes);
+        
+        if (_allCards == null || _allCards.Count == 0)
+        {
+            Debug.LogError("Failed to spawn cards!");
+            return;
+        }
+        
+        for (int i = 0; i < _allCards.Count; i++)
+        {
+            _allCards[i].SetCardState(data.cardStates[i]);
+        }
+        
+        scoreManager.SetScore(data.score);
+        SubscribeToCards();
+        _acceptPlayerInput = true;
+        Debug.Log("Game restored from save");
+    }
     
-    private void InitializeGame()
+    
+    private void InitializeNewGame()
     {
         _allCards = cardSpawner.ShuffleAndSpawnCards();
         if (_allCards == null || _allCards.Count == 0)
@@ -24,12 +60,8 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Failed to spawn cards!");
             return;
         }
-        
-        foreach (var card in _allCards)
-        {
-            card.OnCardSelected += HandleSelectedCard;
-        }
 
+        SubscribeToCards();
         StartCoroutine(InitialRevealSequence());
     }
     
@@ -50,6 +82,14 @@ public class GameManager : MonoBehaviour
         
         yield return new WaitForSeconds(0.6f);
         _acceptPlayerInput = true;
+    }
+
+    private void SubscribeToCards()
+    {
+        foreach (var card in _allCards)
+        {
+            card.OnCardSelected += HandleSelectedCard;
+        }
     }
 
     private void HandleSelectedCard(Card card)
@@ -97,5 +137,10 @@ public class GameManager : MonoBehaviour
         {
             card.OnCardSelected -= HandleSelectedCard;
         }
+    }
+    
+    private void OnApplicationQuit()
+    {
+        saveSystem.SaveGame(scoreManager, _allCards);
     }
 }

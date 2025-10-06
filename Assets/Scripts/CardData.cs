@@ -16,3 +16,10 @@ public enum CardType
     Fox,
     Lion
 }
+
+public enum CardState
+{
+    FaceDown,
+    FaceUp,
+    Matched
+}

@@ -45,6 +45,24 @@ public class CardSpawner : MonoBehaviour
         Debug.Log($"Spawned {_spawnedCards.Count} cards ({amountOfPairsToSpawn} pairs)");
         return _spawnedCards;
     }
+
+    public List<Card> SpawnCardsFromSave(CardType[] savedCardTypes)
+    {
+        ClearCards();
+        foreach (var cardType in savedCardTypes)
+        {
+            var matchingData = availableCardTypes.Find(data => data.Type == cardType);
+        
+            var cardObj = Instantiate(cardPrefab, cardContainerParent);
+            var card = cardObj.GetComponent<Card>();
+        
+            card.SetCardData(matchingData);
+            _spawnedCards.Add(card);
+        }
+    
+        Debug.Log($"Spawned {_spawnedCards.Count} cards from save data");
+        return _spawnedCards;
+    }
     
     private void ShuffleCards(List<CardData> list)
     {
@@ -65,5 +83,10 @@ public class CardSpawner : MonoBehaviour
             }
         }
         _spawnedCards.Clear();
+    }
+    
+    public void SetPairsToSpawn(int pairs)
+    {
+        amountOfPairsToSpawn = pairs;
     }
 }

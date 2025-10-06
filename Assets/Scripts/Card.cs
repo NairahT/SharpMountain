@@ -13,29 +13,29 @@ public class Card : MonoBehaviour
     [SerializeField] private Sprite cardBackSprite;
     
     public CardType CardType => _card.Type;
+    public CardState CurrentState { get; private set; } = CardState.FaceDown;
     
     private CardData _card;
     private Sprite _cardFrontImg;
-    private bool _isFaceUp = false;
     private bool _isFlipping = false;
-    private bool _isMatched = false;
+    
+    private bool IsCurrentlyUp => CurrentState is CardState.FaceUp or CardState.Matched;
 
     private void OnEnable() => cardButton.onClick.AddListener(OnClickCard);
     private void OnDisable() => cardButton.onClick.RemoveListener(OnClickCard);
 
-    private void Start()
+    public void SetCardData(CardData cardData)
     {
-        cardImage.sprite = _isFaceUp ? _card.Image : cardBackSprite;
+        _card = cardData;
+        cardImage.sprite = cardBackSprite;
         _cardFrontImg = _card.Image;
+        CurrentState = CardState.FaceDown;
     }
-
-    public void SetCardData(CardData cardData) => _card = cardData;
     
     private void OnClickCard()
     {
-        if(_isMatched) return;
+        if (IsCurrentlyUp) return;
         if(_isFlipping) return;
-        if(_isFaceUp) return;
         
         FlipCard(true);
         OnCardSelected?.Invoke(this);
@@ -44,7 +44,9 @@ public class Card : MonoBehaviour
     private void FlipCard(bool faceUp)
     {
         if(_isFlipping) return;
-        if(_isFaceUp == faceUp) return;
+        
+        if(IsCurrentlyUp == faceUp) return;
+        
         StartCoroutine(Flip(faceUp));
     }
     
@@ -55,7 +57,7 @@ public class Card : MonoBehaviour
         AudioManager.Instance.PlayFlip();
         
         var timeElapsed = 0f;
-        float startAngle = _isFaceUp ? 180 : 0;
+        float startAngle = IsCurrentlyUp ? 180 : 0;
         float endAngle = faceUp ? 180 : 0;
         var colorSwapped = false;
     
@@ -68,7 +70,7 @@ public class Card : MonoBehaviour
             if (t >= 0.5f && !colorSwapped) 
             {
                 cardImage.sprite = faceUp ? _cardFrontImg : cardBackSprite;
-                _isFaceUp = faceUp;
+                CurrentState = faceUp ? CardState.FaceUp : CardState.FaceDown;
                 colorSwapped = true;
             }
     
@@ -80,9 +82,32 @@ public class Card : MonoBehaviour
 
     public void FoundMatch()
     {
-        _isMatched = true;
+        CurrentState = CardState.Matched;
         ScaleCardUp();
-    } 
+    }
+
+    public void SetCardState(CardState state)
+    {
+        CurrentState = state;
+
+        switch (state)
+        {
+            case CardState.Matched:
+                cardImage.sprite = _cardFrontImg;
+                cardImage.transform.rotation = Quaternion.Euler(0, 180, 0);
+                cardImage.transform.localScale = Vector3.one * 1.3f; 
+                break;
+            case CardState.FaceUp:
+                cardImage.sprite = _cardFrontImg;
+                cardImage.transform.rotation = Quaternion.Euler(0, 180, 0);
+                break;
+            case CardState.FaceDown:
+            default:
+                cardImage.sprite = cardBackSprite;
+                cardImage.transform.rotation = Quaternion.Euler(0, 0, 0);
+                break;
+        }
+    }
 
     private void ScaleCardUp() => StartCoroutine(ScaleCard(0.1f));
     
@@ -110,4 +135,5 @@ public class Card : MonoBehaviour
         yield return new WaitForSeconds(1f);
         FlipCard(false);
     }
+
 }
