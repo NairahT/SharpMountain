@@ -4,6 +4,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private List<Card> cards;
+    [SerializeField] private ScoreManager scoreManager;
     
     private Card _firstSelectedCard;
     private Card _secondSelectedCard;
@@ -42,6 +43,7 @@ public class GameManager : MonoBehaviour
             AudioManager.Instance.PlayMatch();
             _firstSelectedCard.FoundMatch();
             _secondSelectedCard.FoundMatch();
+            scoreManager.UpdateScore();
         }
         else
         {
