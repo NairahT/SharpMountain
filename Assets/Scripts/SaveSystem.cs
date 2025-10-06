@@ -40,6 +40,15 @@ public class SaveSystem : MonoBehaviour
         Debug.Log("Game loaded!");
         return data;
     }
+    
+    public void DeleteSave()
+    {
+        if (File.Exists(savePath))
+        {
+            File.Delete(savePath);
+            Debug.Log("Save deleted");
+        }
+    }
 }
 
 [System.Serializable]

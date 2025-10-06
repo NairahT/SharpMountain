@@ -14,11 +14,11 @@ public class GameManager : MonoBehaviour
     private Card _secondSelectedCard;
     private int _cardCounter = 0;
     private bool _acceptPlayerInput = false;
-
+    private bool _didWin = false;
+    
     private void Start()
     {
-        SaveData saveData = saveSystem.LoadGame();
-
+        var saveData = saveSystem.LoadGame();
         if (saveData != null)
         {
             LoadFromSave(saveData);
@@ -142,8 +142,11 @@ public class GameManager : MonoBehaviour
         {
             if (card.CurrentState != CardState.Matched) return;
         }
+        
         Debug.Log("You won!");
+        _didWin = true;
         AudioManager.Instance.PlayWinGame();
+        saveSystem.DeleteSave();
         _acceptPlayerInput = false;
     }
 
@@ -157,6 +160,6 @@ public class GameManager : MonoBehaviour
     
     private void OnApplicationQuit()
     {
-        saveSystem.SaveGame(scoreManager, _allCards);
+        if(!_didWin) saveSystem.SaveGame(scoreManager, _allCards);
     }
 }
