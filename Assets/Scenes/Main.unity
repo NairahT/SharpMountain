@@ -1040,6 +1040,7 @@ MonoBehaviour:
   flipSound: {fileID: 8300000, guid: baca8e6965bb6d54da333bfcc882afd8, type: 3}
   matchSound: {fileID: 8300000, guid: 91ca4f32916837b479fb58e8f8ddf784, type: 3}
   mismatchSound: {fileID: 8300000, guid: 04dd9760da1cf974f9a4cdd32ca57f61, type: 3}
+  winGameSound: {fileID: 8300000, guid: 425d338e1a5ff664c90e132f724f11f8, type: 3}
 --- !u!82 &1357512893
 AudioSource:
   m_ObjectHideFlags: 0
