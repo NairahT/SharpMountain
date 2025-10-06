@@ -98,7 +98,7 @@ public class Card : MonoBehaviour
             case CardState.Matched:
                 cardImage.sprite = _cardFrontImg;
                 cardImage.transform.rotation = Quaternion.Euler(0, 180, 0);
-                cardImage.transform.localScale = Vector3.one * 1.3f; 
+                cardImage.transform.localScale = new Vector3(-1.1f, 1.1f, 1.1f); 
                 break;
             case CardState.FaceDown:
             default:
@@ -113,7 +113,7 @@ public class Card : MonoBehaviour
     private IEnumerator ScaleCard(float timeToScale)
     {
         var startScale = cardImage.transform.localScale;
-        var targetScale = startScale * 1.3f;
+        var targetScale = new Vector3(-1.1f, 1.1f, 1.1f);
         var elapsedTime = 0f;
 
         while (elapsedTime < timeToScale)

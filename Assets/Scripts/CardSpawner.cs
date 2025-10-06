@@ -7,6 +7,9 @@ public class CardSpawner : MonoBehaviour
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private List<CardData> availableCardTypes;
     [SerializeField] private int amountOfPairsToSpawn = 6;
+    [SerializeField] private GridLayoutConfig gridConfig;
+    [SerializeField] private int gridRows = 4;
+    [SerializeField] private int gridColumns = 3;
     
     private readonly List<Card> _spawnedCards = new List<Card>();
     
@@ -19,6 +22,7 @@ public class CardSpawner : MonoBehaviour
         }
         
         ClearCards();
+        gridConfig.ConfigureGrid(gridRows, gridColumns);
         
         var cardDataList = new List<CardData>();
         for (var i = 0; i < amountOfPairsToSpawn; i++)
@@ -49,6 +53,8 @@ public class CardSpawner : MonoBehaviour
     public List<Card> SpawnCardsFromSave(CardType[] savedCardTypes)
     {
         ClearCards();
+        gridConfig.ConfigureGrid(gridRows, gridColumns);
+
         foreach (var cardType in savedCardTypes)
         {
             var matchingData = availableCardTypes.Find(data => data.Type == cardType);

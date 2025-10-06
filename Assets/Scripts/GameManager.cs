@@ -6,8 +6,8 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private CardSpawner cardSpawner;
     [SerializeField] private ScoreManager scoreManager;
-    [SerializeField] private float revealDuration = 5f;
     [SerializeField] private SaveSystem saveSystem;
+    [SerializeField] private float revealDuration = 5f;
     
     private List<Card> _allCards = new List<Card>();
     private Card _firstSelectedCard;
@@ -127,7 +127,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log($"No match found between {_firstSelectedCard.CardType} and {_secondSelectedCard.CardType}");
             AudioManager.Instance.PlayMismatch();
             _firstSelectedCard.FlipFaceDown();
             _secondSelectedCard.FlipFaceDown();
